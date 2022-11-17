@@ -1,5 +1,5 @@
 # ItemhuntTargetTools
-A utility plugin for Itemhunt target items.
+A utility plugin for managing targets of Itemhunt.
 
 ## Depends
 [CommandAPI](https://www.spigotmc.org/resources/api-commandapi-1-13-1-19-2.62353/)
