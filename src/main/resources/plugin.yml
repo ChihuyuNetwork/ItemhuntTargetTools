@@ -1,0 +1,5 @@
+name: # TODO
+version: '1.0.0'
+main: love.chihuyu.Plugin
+authors: [ Hirosuke ]
+depend: [CommandAPI]
