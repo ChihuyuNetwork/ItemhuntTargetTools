@@ -11,10 +11,10 @@ Export chest items with point of `category` to targets.yml in data folder.
 Target point set to item's display name.
 
 * `/iht delete <category>`  
-Delete `category` and that items from targets.yml.
+Delete `category` and items from targets.yml.
 
 * `/iht list <category>`  
-Show all targets with point of `category`.
+Show all targets point of `category`.
 
 ## Permissions
 All commands permissions are in OP.
