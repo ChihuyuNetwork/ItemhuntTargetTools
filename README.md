@@ -7,7 +7,7 @@ A utility plugin for Itemhunt target items.
 ## Commands
 
 * `/itemhunttargettools[iht] export <category>`  
-Export `category` items and points inside of seeing chest to ItemhuntTargetTools/targets.yml.  
+Export items and points inside of seeing chest to `category` in ItemhuntTargetTools/targets.yml.  
 Target point set to item's display name.
 
 * `/iht delete <category>`  
