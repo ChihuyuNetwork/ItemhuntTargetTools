@@ -10,11 +10,11 @@ A utility plugin for Itemhunt target items.
 Export chest items with point of `category` to targets.yml in data folder.  
 Target point set to item's display name.
 
-* `/iht delete`  
-Delete category and that items from targets.yml.
+* `/iht delete <category>`  
+Delete `category` and that items from targets.yml.
 
-* `/iht list`  
-Show all targets with point of specified category.
+* `/iht list <category>`  
+Show all targets with point of `category`.
 
 ## Permissions
 All commands permissions are in OP.
