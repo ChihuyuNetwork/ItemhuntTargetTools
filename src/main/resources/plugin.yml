@@ -1,5 +1,6 @@
-name: # TODO
+name: ItemhuntTargetTools
 version: '1.0.0'
+api-version: 1.19
 main: love.chihuyu.Plugin
 authors: [ Hirosuke ]
 depend: [CommandAPI]
