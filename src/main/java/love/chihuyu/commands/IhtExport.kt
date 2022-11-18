@@ -6,6 +6,8 @@ import dev.jorel.commandapi.arguments.StringArgument
 import dev.jorel.commandapi.executors.PlayerCommandExecutor
 import love.chihuyu.Plugin.Companion.plugin
 import love.chihuyu.Plugin.Companion.prefix
+import love.chihuyu.Plugin.Companion.targetConfig
+import love.chihuyu.Plugin.Companion.targetFile
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.Style
@@ -13,35 +15,20 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.ChatColor
 import org.bukkit.block.Chest
-import org.bukkit.configuration.file.YamlConfiguration
-import java.io.File
 
 object IhtExport {
 
-    val main = CommandAPICommand("export")
-        .withArguments(StringArgument("category").replaceSuggestions(ArgumentSuggestions.strings { plugin.config.getConfigurationSection("targets")?.getKeys(false)?.toTypedArray() }))
+    val main: CommandAPICommand = CommandAPICommand("export")
+        .withArguments(StringArgument("category").replaceSuggestions(ArgumentSuggestions.strings { targetConfig.getConfigurationSection("targets")?.getKeys(false)?.toTypedArray() }))
         .executesPlayer(
             PlayerCommandExecutor { sender, args ->
                 val category = args[0] as String
-                val dir = File(plugin.dataFolder.path)
-                val file = File("${plugin.dataFolder}/targets.yml")
-                val yaml = YamlConfiguration()
                 val block = sender.getTargetBlock(4)?.state as? Chest
 
                 if (block == null) {
                     sender.sendMessage("$prefix${ChatColor.RED} チェストが見当たりません")
                     return@PlayerCommandExecutor
                 }
-
-                if (!dir.exists()) {
-                    dir.mkdir()
-                }
-
-                if (!file.exists()) {
-                    file.createNewFile()
-                }
-
-                yaml.load(file)
 
                 val data = block.blockInventory.contents.filterNotNull().toMutableSet()
 
@@ -64,17 +51,17 @@ object IhtExport {
 
                 data.forEach {
                     if (!it.hasItemMeta()) return@forEach
-                    var point = yaml.getInt("targets.$category.${it.type.name}")
+                    var point = targetConfig.getInt("targets.$category.${it.type.name}")
                     if (point == 0) point = try {
                         Integer.parseInt(it.itemMeta?.displayName)
                     } catch (e: NumberFormatException) {
                         plugin.logger.warning("${it.itemMeta?.displayName} is cannot parse to int.")
                         -1
                     }
-                    yaml.set("targets.$category.${it.type.name}", point)
+                    targetConfig.set("targets.$category.${it.type.name}", point)
                 }
 
-                yaml.save(file)
+                targetConfig.save(targetFile)
 
                 sender.sendMessage(
                     Component.text("$prefix ${ChatColor.GREEN}アイテム群を\"$category\"で出力しました(${ChatColor.WHITE}")
@@ -83,14 +70,14 @@ object IhtExport {
                                 .style(Style.style(TextColor.color(255, 255, 255), TextDecoration.UNDERLINED))
                                 .hoverEvent(
                                     HoverEvent.showText(
-                                        Component.text(yaml.getConfigurationSection("targets.$category")?.getKeys(false)?.joinToString("\n") { "$it: ${yaml.getInt("targets.$category.$it")}" } ?: "null")
+                                        Component.text(targetConfig.getConfigurationSection("targets.$category")?.getKeys(false)?.joinToString("\n") { "$it: ${targetConfig.getInt("targets.$category.$it")}" } ?: "null")
                                     )
                                 )
                         )
                         .append(Component.text("${ChatColor.GREEN})"))
                 )
 
-                IhtList.main.arguments[0].replaceSuggestions(ArgumentSuggestions.strings { plugin.config.getConfigurationSection("targets")?.getKeys(false)?.toTypedArray() })
+                CommandItemhuntTargetTools.updateSuggestions()
             }
         )
 }
